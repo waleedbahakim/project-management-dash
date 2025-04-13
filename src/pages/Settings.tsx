@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useUIStore } from '@/store/uiStore';
 import { Switch } from '@headlessui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CogIcon, SunIcon, MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
+import { CogIcon } from '@heroicons/react/24/outline';
+import { useThemeContext } from '@/components/ThemeProvider';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 export default function Settings() {
-  const { theme, setThemeMode } = useUIStore();
+  const { theme } = useThemeContext();
   const [isLoaded, setIsLoaded] = useState(false);
   
   useEffect(() => {
@@ -34,28 +35,6 @@ export default function Settings() {
         stiffness: 300,
         damping: 24
       }
-    }
-  };
-  
-  const buttonVariants = {
-    inactive: { 
-      scale: 1,
-      backgroundColor: 'var(--frosted-glass-background)',
-      boxShadow: 'none' 
-    },
-    active: { 
-      scale: 1.05, 
-      backgroundColor: 'var(--glass-background)',
-      boxShadow: 'var(--primary-glow)'
-    },
-    hover: { 
-      scale: 1.03, 
-      y: -2,
-      boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' 
-    },
-    tap: { 
-      scale: 0.97, 
-      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' 
     }
   };
   
@@ -104,55 +83,33 @@ export default function Settings() {
                 Choose between light, dark, or system-defined appearance
               </motion.p>
             </div>
-            <div className="flex space-x-3 items-center">
-              <motion.button
-                onClick={() => setThemeMode('light')}
-                className={`px-3 py-2 text-sm rounded-lg flex items-center gap-2 frosted-glass ${
-                  theme.mode === 'light'
-                    ? 'border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-                variants={buttonVariants}
-                initial="inactive"
-                animate={theme.mode === 'light' ? 'active' : 'inactive'}
-                whileHover="hover"
-                whileTap="tap"
+            <ThemeSwitcher size="md" />
+          </motion.div>
+
+          <motion.div 
+            className="flex items-center justify-between p-4 frosted-glass rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div>
+              <motion.h3 
+                className="text-sm font-medium text-gray-800 dark:text-white"
+                whileHover={{ x: 2 }}
               >
-                <SunIcon className="h-4 w-4" />
-                Light
-              </motion.button>
-              <motion.button
-                onClick={() => setThemeMode('dark')}
-                className={`px-3 py-2 text-sm rounded-lg flex items-center gap-2 frosted-glass ${
-                  theme.mode === 'dark'
-                    ? 'border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-                variants={buttonVariants}
-                initial="inactive"
-                animate={theme.mode === 'dark' ? 'active' : 'inactive'}
-                whileHover="hover"
-                whileTap="tap"
+                Current Theme
+              </motion.h3>
+              <motion.p 
+                className="text-sm text-gray-500 dark:text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.8 }}
+                transition={{ delay: 0.4 }}
               >
-                <MoonIcon className="h-4 w-4" />
-                Dark
-              </motion.button>
-              <motion.button
-                onClick={() => setThemeMode('system')}
-                className={`px-3 py-2 text-sm rounded-lg flex items-center gap-2 frosted-glass ${
-                  theme.mode === 'system'
-                    ? 'border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300'
-                    : 'text-gray-600 dark:text-gray-300'
-                }`}
-                variants={buttonVariants}
-                initial="inactive"
-                animate={theme.mode === 'system' ? 'active' : 'inactive'}
-                whileHover="hover"
-                whileTap="tap"
-              >
-                <ComputerDesktopIcon className="h-4 w-4" />
-                System
-              </motion.button>
+                {theme === 'light' ? 'Light Mode' : theme === 'dark' ? 'Dark Mode' : 'System Default'}
+              </motion.p>
+            </div>
+            <div className="h-8 w-8 rounded-full bg-primary-500 dark:bg-primary-600 shadow-lg shadow-primary-500/30 dark:shadow-primary-600/30 flex items-center justify-center">
+              <span className="text-white text-xs">{theme === 'light' ? 'L' : theme === 'dark' ? 'D' : 'S'}</span>
             </div>
           </motion.div>
         </div>

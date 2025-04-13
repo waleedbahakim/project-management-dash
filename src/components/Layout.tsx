@@ -19,6 +19,7 @@ import {
 import { useUIStore } from '@/store/uiStore';
 import Sidebar from '@/features/Sidebar/Sidebar';
 import { motion, AnimatePresence } from 'framer-motion';
+import ThemeToggle from './ThemeToggle';
 
 // Map routes to page titles and icons
 const pageConfig = {
@@ -353,18 +354,7 @@ export default function Layout() {
             
             {/* Theme Toggle */}
             {mounted && (
-              <motion.button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:bg-opacity-30 focus:outline-none"
-                whileHover={{ scale: 1.1, rotate: 15 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {theme.mode === 'dark' ? (
-                  <MoonIcon className="h-5 w-5 text-primary-400 dark:text-primary-300" />
-                ) : (
-                  <SunIcon className="h-5 w-5 text-yellow-500" />
-                )}
-              </motion.button>
+              <ThemeToggle />
             )}
             
             {/* User Profile */}

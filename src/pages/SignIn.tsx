@@ -10,8 +10,12 @@ import {
   EnvelopeIcon,
   UserIcon,
   ChartBarSquareIcon,
-  Cog6ToothIcon
+  Cog6ToothIcon,
+  MoonIcon,
+  SunIcon
 } from '@heroicons/react/24/outline';
+import { useUIStore } from '@/store/uiStore';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -22,7 +26,28 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [activeDemo, setActiveDemo] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  // Get theme from UI store
+  const theme = useUIStore(state => state.theme);
+  const setThemeMode = useUIStore(state => state.setThemeMode);
   
+  // Theme toggle function
+  const toggleTheme = () => {
+    if (theme.mode === 'light') {
+      setThemeMode('dark');
+    } else if (theme.mode === 'dark') {
+      setThemeMode('system');
+    } else {
+      setThemeMode('light');
+    }
+  };
+
+  // Set mounted state after hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Demo credentials
   const demoUsers = [
     { role: 'Project Manager', email: 'manager@projecthub.com', password: 'manager123' },
@@ -135,6 +160,13 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 overflow-hidden">
+      {/* Theme toggle button */}
+      {mounted && (
+        <div className="fixed top-4 right-4 z-50">
+          <ThemeToggle />
+        </div>
+      )}
+
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
